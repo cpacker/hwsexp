@@ -97,8 +97,9 @@ cgen (S.Function _ _ _) = fail "Must not generate Function"
 liftError :: ErrorT String IO a -> IO a
 liftError = runErrorT >=> either fail return
 
+type Int64List = (Int64, Ptr Int64)
 type MainFunctionS = IO Int64
-type MainFunctionM = IO (Ptr Int64)
+type MainFunctionM = IO (Ptr Int64List)
 
 foreign import ccall unsafe "dynamic" singleJitFun :: FunPtr MainFunctionS -> MainFunctionS
 foreign import ccall unsafe "dynamic" multipleJitFun :: FunPtr MainFunctionM -> MainFunctionM

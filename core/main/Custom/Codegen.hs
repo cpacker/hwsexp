@@ -18,6 +18,7 @@ import qualified LLVM.General.AST as AST
 
 import qualified LLVM.General.AST.Constant as C
 import qualified LLVM.General.AST.Attribute as A
+import qualified LLVM.General.AST.AddrSpace as AS
 import qualified LLVM.General.AST.CallingConvention as CC
 import qualified LLVM.General.AST.IntegerPredicate as IP
 
@@ -63,6 +64,17 @@ external retty label argtys body = addDefn $
 
 int64 :: Type
 int64 = IntegerType 64
+
+-- |This is pointer to a "list" of 64bit integers. The underlying list is a 
+--  packed structure containing @{ int64 size, int64* elements }@
+pint64List :: Type
+pint64List = PointerType list zero
+  where
+    list :: Type
+    list = StructureType True [int64, PointerType int64 zero]
+
+    zero :: AS.AddrSpace
+    zero = AS.AddrSpace 0
 
 -------------------------------------------------------------------------------
 -- Names
